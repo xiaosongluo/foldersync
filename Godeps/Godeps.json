@@ -1,0 +1,11 @@
+{
+	"ImportPath": "github.com/xiaosongluo/foldersync",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v79",
+	"Deps": [
+		{
+			"ImportPath": "github.com/dutchcoders/goftp",
+			"Rev": "ed59a591ce14ff6c19c49be14294528d11a88c37"
+		}
+	]
+}
