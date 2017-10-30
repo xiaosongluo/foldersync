@@ -173,4 +173,3 @@ func (ftp *FTP) remoteFileMd5(path string) (string, error) {
 
 	return hash, nil
 }
-
