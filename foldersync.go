@@ -11,14 +11,14 @@ import (
 	"strings"
 )
 
-type FSFTP struct {
+type FTP struct {
 	Host     string
 	Port     int
 	User     string
 	Password string
 }
 
-func (fsftp *FSFTP) FolderSync(local string, remote string, flag string) (bool, error) {
+func (ftp *FTP) FolderSync(local string, remote string, flag string) (bool, error) {
 
 	var err error
 	var gftp *goftp.FTP
@@ -27,21 +27,21 @@ func (fsftp *FSFTP) FolderSync(local string, remote string, flag string) (bool, 
 	local = filepath.ToSlash(local)
 	remote = filepath.ToSlash(remote + "/")
 
-	if rst, _ := fsftp.needUpdate(local, remote, flag); rst == true {
+	if rst, _ := ftp.needUpdate(local, remote, flag); rst == true {
 
 		err = os.RemoveAll(local)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
 
-		url := fmt.Sprintf("%s:%d", fsftp.Host, fsftp.Port)
+		url := fmt.Sprintf("%s:%d", ftp.Host, ftp.Port)
 		if gftp, err = goftp.Connect(url); err != nil {
 			return false, err
 		}
 		defer gftp.Close()
 
 		// Username / password authentication
-		if err = gftp.Login(fsftp.User, fsftp.Password); err != nil {
+		if err = gftp.Login(ftp.User, ftp.Password); err != nil {
 			return false, err
 		}
 
@@ -94,7 +94,7 @@ func (fsftp *FSFTP) FolderSync(local string, remote string, flag string) (bool, 
 	return true, nil
 }
 
-func (fsftp *FSFTP) needUpdate(local string, remote string, flag string) (bool, error) {
+func (ftp *FTP) needUpdate(local string, remote string, flag string) (bool, error) {
 	needUpdate := false
 
 	if b, _ := pathExists(local); b == false {
@@ -105,8 +105,8 @@ func (fsftp *FSFTP) needUpdate(local string, remote string, flag string) (bool, 
 
 		fmt.Println(fmt.Sprintf("metadata.xml:local(%s),remote(%s)\n", localFlag, remoteFlag))
 
-		lmd5, _ := fsftp.localFileMd5(localFlag)
-		rmd5, _ := fsftp.remoteFileMd5(remoteFlag)
+		lmd5, _ := ftp.localFileMd5(localFlag)
+		rmd5, _ := ftp.remoteFileMd5(remoteFlag)
 
 		fmt.Println(fmt.Sprintf("MD5 of metadata.xml:local(%s),remote(%s)\n", lmd5, rmd5))
 
@@ -130,7 +130,7 @@ func pathExists(path string) (bool, error) {
 	return false, err
 }
 
-func (fsftp *FSFTP) localFileMd5(path string) (string, error) {
+func (ftp *FTP) localFileMd5(path string) (string, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return "", err
@@ -145,19 +145,19 @@ func (fsftp *FSFTP) localFileMd5(path string) (string, error) {
 	return hex.EncodeToString(hash.Sum(nil)), nil
 }
 
-func (fsftp *FSFTP) remoteFileMd5(path string) (string, error) {
+func (ftp *FTP) remoteFileMd5(path string) (string, error) {
 
 	var err error
 	var gftp *goftp.FTP
 
-	url := fmt.Sprintf("%s:%d", fsftp.Host, fsftp.Port)
+	url := fmt.Sprintf("%s:%d", ftp.Host, ftp.Port)
 	if gftp, err = goftp.Connect(url); err != nil {
 		return "", err
 	}
 	defer gftp.Close()
 
 	// Username / password authentication
-	if err = gftp.Login(fsftp.User, fsftp.Password); err != nil {
+	if err = gftp.Login(ftp.User, ftp.Password); err != nil {
 		return "", err
 	}
 
@@ -173,3 +173,4 @@ func (fsftp *FSFTP) remoteFileMd5(path string) (string, error) {
 
 	return hash, nil
 }
+
