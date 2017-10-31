@@ -14,4 +14,4 @@
 .glide/
 
 # Gogland IDE
-.idea/**/*
+.idea/
