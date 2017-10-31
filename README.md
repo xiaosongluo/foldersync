@@ -6,7 +6,7 @@ The folder sync allows you to keep folder synced between local and remote via ft
 
 The folder sync define a flag file, when a folder's content has changed, the flag file in the folder must be change too. So, the folder sync can use the flag file to judge whether the remote folder changes. It's important to avoid useless sync.
 
-##Basic Usage
+## Basic Usage
 
 ```Go
 package main
