@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// FTP is a representation of a ftp
 type FTP struct {
 	Host     string
 	Port     int
@@ -18,6 +19,7 @@ type FTP struct {
 	Password string
 }
 
+// FolderSync to sync folder
 func (ftp *FTP) FolderSync(local string, remote string, flag string) (bool, error) {
 
 	var err error
